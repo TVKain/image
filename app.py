@@ -4,6 +4,7 @@ import base64
 import numpy as np
 
 from otsu_threshold import otsu_threshold
+from adaptive_mean_threshold import adaptive_mean_threshold, fast_adaptive_mean_threshold
 
 eel.init('web')
 
@@ -57,6 +58,23 @@ def process_otsu_threshold(image_data):
     result_b64 = cv2_to_base64(segmented)
 
     return result_b64, int(threshold)
+
+@eel.expose 
+def process_adaptive_mean_threshold(image_data):
+    img = base64_to_cv2(image_data)
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+   
+    #lib_threshold, segmented = lib_otsu_threshold(gray)
+    segmented = fast_adaptive_mean_threshold(gray)
+
+    result_b64 = cv2_to_base64(segmented)
+
+    return result_b64
+
+def lib_adaptive_mean_threshold(image):
+    return cv2.adaptiveThreshold(image ,255, cv2.ADAPTIVE_THRESH_MEAN_C,\
+            cv2.THRESH_BINARY,11,2)
 
 def lib_otsu_threshold(image):
     return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)

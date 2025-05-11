@@ -79,6 +79,12 @@ runButton.addEventListener('click', function () {
       calcThreshold.style.display = 'inline-block';
       calcThreshold.textContent = response[1];
     });
+  } 
+  else if (method == 'adaptiveMean') {
+    eel.process_adaptive_mean_threshold(imageData)(function(response) {
+      document.getElementById('processedPreview').src = response;
+      calcThreshold.style.display = 'none';
+    })
   }
   // else if (method === 'adaptive') {
   //   eel.adaptive_thresholding(imageData)(function(response) {
